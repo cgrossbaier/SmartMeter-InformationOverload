@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body
+{
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    margin: 0px 0 0 0px;
+    top: 15%;
+    left: 15%;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+label
+{
+width: 4em;
+float: left;
+text-align: right;
+margin-right: 0.5em;
+display: block
+}
+
+input
+{
+color: black;
+background: ffffff;
+border: 1px solid grey
+}
+
+.submit input
+{
+margin-left: 4.5em;
+color: #000;
+background: #ffffff;
+border: 2px outset #d7b9c9
+}
+fieldset
+{
+border: 1px solid grey;
+width: 40em
+}
+
+legend
+{
+color: black;
+background: #ffffff;
+border: 1px solid #781351;
+padding: 2px 6px
+}
+
+table
+{
+    border-color: grey;
+    border-width: 1px 0px 1px 0px;
+    border-style: dotted;
+}
+
+</style>
+</head>
+
+<body>
+
+
+<fieldset>
+<legend>Question {{question.id}}: </legend>
+<h2>{{ question.text }}</h2>
+<h3>{{ question.explanation }}</h3>
+
+ <p></p>
+
+
+{% if error_message %}<p><strong style='color: red;'>{{ error_message }}</strong></p>{% endif %}
+ <style type="text/css">
+    #likert { text-align:center; }
+    #likert td { width: 70px; }
+ </style>
+ 
+<p></p>
+<p></p>
+<p></p>
+ <form action="/questionnaire/{{ question.id }}/vote/" method="post">
+    {% csrf_token %}
+  <table id="likert" align="center">
+    <tr>
+        {% for choice in question.choice_set.all %}
+            <td>{{ choice.name }}</td>
+         {% endfor %}
+    </tr>
+    
+     <tr>
+        {% for choice in question.choice_set.all %}
+            <td><input id="choice{{ forloop.counter }}" type="radio" name="choice" value="{{ choice.nr }}" 
+            <label for="choice{{ forloop.counter }}"></label></td>
+         {% endfor %}
+     </tr>
+     <tr>
+         <td>{{ question.left }}</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td>{{ question.right }}</td>
+     </tr>
+  </table>
+</p>
+<input type="submit" style="float: right; margin-right: 50px"; value="Submit"/>
+</fieldset>
+</form> 
+
+</body>
+</html>

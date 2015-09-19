@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}Energy Information Lab{% endblock %}</title>
+<style>
+    
+body
+{
+    position: absolute;
+    height: 200px;
+    width: 300px;
+    margin: 0px 0 0 0px;
+    top: 15%;
+    left: 15%;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+label
+{
+width: 4em;
+float: left;
+text-align: right;
+margin-right: 0.5em;
+display: block
+}
+
+.submit input
+{
+margin-left: 4.5em;
+}
+input
+{
+color: black;
+background: ffffff;
+border: 1px solid #781351
+}
+
+.submit input
+{
+color: #000;
+background: #ffffff;
+border: 2px outset #d7b9c9
+}
+fieldset
+{
+border: 1px solid grey;
+width: 40em
+}
+
+legend
+{
+color: black;
+background: #ffffff;
+border: 1px solid #781351;
+padding: 2px 6px
+} 
+
+</style>
+</head>
+
+<body>
+
+<div class='login'>
+
+<form action="/welcome/1/" method="post">
+{% csrf_token %}
+<fieldset>
+<legend>Knapsack</legend>
+<p>Thank you for taking part in this experiment.</p>
+<p>You are logged in as:</p>
+<p><h3>{{ user.user_code }}</p></h3>
+<p>After participating in this game and filling in a questionnaire, you will receive a code to post into mTurk to get your HIT.</p>
+
+<p class="submit" style="float: right"><input type="submit" value="Continue" /></p>
+</fieldset>
+</form> 
+</div>
+</html>

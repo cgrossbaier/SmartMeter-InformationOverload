@@ -1,0 +1,343 @@
+<html>
+<head>
+<title>{% block title %}Energy Information Lab{% endblock %}</title>
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+
+</head>
+
+
+<style type="text/css">
+	
+body
+{
+    position: absolute;
+    height: 600px;
+    width: 960px;
+    margin: 0px 0 0 0px;
+    top: 15px;
+    left: 50px;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif
+}
+
+#Up {
+  border: 1px solid grey ;
+  width: 700px;
+  height: 380px;
+}
+#Middle {
+  border: 1px solid white;
+  width: 700px;
+  height: 10px;
+  float: left;
+}
+#Side {
+  border: 1px solid grey;
+  width: 170px;
+  height: 420px;
+  margin: 12px;
+  float: right;
+  padding: 2px;
+}
+
+#Down{
+  border: 1px solid grey;
+  width: 700px;
+  height: 35px;
+}
+.box {
+		padding: 4px;
+		margin:2px;
+		border:1px outset rgb(237,237,237);
+		background: #ffffff;
+		float:left;
+		height:20px;
+		color: #000;
+}
+
+fieldset
+{
+border: 1px solid grey;
+}
+
+legend
+{
+color: black;
+background: #ffffff;
+border: 1px solid #781351;
+padding: 2px 6px
+} 
+</style>
+
+<script>
+var nextPageClicked=false;
+
+function save(target, kind) {
+	// Calls function plotpayout() to update payout
+	var payout = plotpayout();
+	// data to be sent to knapsack.view.save
+	// Id: box.ID, Kind: Add or Remove box, user_code: user, payout : payout
+	var data= {id: target.getAttribute("data-id"), kind: kind, user_code: target.getAttribute("data-user"), payout: payout};
+	var link = "/knapsack/"+{{round.nr}}+"/save/";
+	
+	$.getJSON(link, data, function(json){
+	}); 
+}
+function full() {
+	// data to be sent to knapsack.view.full
+	//user_code: user
+	var link = "/knapsack/"+{{round.nr}}+"/full/";
+	
+	$.getJSON(link, function(json){
+	}); 
+}
+
+window.onunload = function() {
+	if (nextPageClicked){
+		return null;
+	}
+	else{
+		roundFinished();
+		return null;
+	}
+}
+    
+function plotpayout(){
+	// current knapsack
+	var knapsack= document.getElementById('Down').childNodes;
+	var payout=0;
+	var money = 0.0;
+	// Sum up current benefit
+	for(i=0; i<knapsack.length; i+=1) {
+			payout= payout + parseInt(knapsack[i].getAttribute("data-benefit"));
+	}
+	// Ratio Payout to optimal solution
+	var payoutRatio = payout/ {{round.kpOptimal}};
+	// Payout function to manipulate ratio
+	var payoutFunction= Math.floor(payoutRatio*100);
+	// Format Payout
+	var payoutDisplay = payoutFunction+ " %";
+		// Money
+	if (payoutFunction>0){
+	    money += 0.01;
+	    if (payoutFunction>=80){
+	    money += Math.min((payoutFunction-80)/20*0.20, 0.20);
+	    }
+	}
+	
+	// Format Money
+	var moneyDisplay = "$ " + money.toFixed(2);
+	
+	// Update payout
+	$("div#payout").text(payoutDisplay);
+	if (payoutFunction >= 80) {
+		$( "fieldset#payoutFieldset" ).effect( "highlight", {color: 'green'}, 1000);
+		$( "legend#payoutLegend" ).effect( "highlight", {color: 'green'}, 1000);
+	}
+	$("div#money").text(moneyDisplay);
+	if (payoutFunction >= 80) {
+		$( "fieldset#moneyFieldset" ).effect( "highlight", {color: 'green'}, 1000);
+	}
+	return payoutFunction;
+};
+
+$(function (){
+$(".box").click( function(ev) {
+	// outerBox : inside the knapsack or in the basket
+	var outerBox = ev.target.parentNode;
+	var divWithId;
+	var boxesInKnapsack;
+	var sumWeight;
+	// up : basket
+	var up = document.getElementById('Up');
+	// down: knapsack
+	var down = document.getElementById('Down');
+
+	// if: in knapsack
+	if (outerBox.id == 'Up') {
+		sumWeight=0;
+		// all the boxes currently in the knapsack
+		boxesInKnapsack = down.childNodes;
+		// current knapsack weight
+		for(i=0; i<boxesInKnapsack.length; i+=1) {
+			sumWeight= sumWeight + parseInt(boxesInKnapsack[i].getAttribute("data-weight"))+2;
+		}
+		// if: knapsack weight with new box smaller than restriction, add box and save event
+		if (sumWeight + parseInt(ev.target.getAttribute("data-weight"))+2<= 694){
+			ev.target.style.marginLeft = "0px";
+			ev.target.style.marginRight = "0px";
+			ev.target.style.paddingLeft = "0px";
+			ev.target.style.paddingRight = "0px";
+			ev.target.style.border = "1px outset rgb(237,237,237)";
+			
+			// Add box to knapsack
+			down.appendChild(ev.target);
+			// Save event
+			save(ev.target, "add");
+		}
+		// else: Alert - Box is full
+		else{
+			// set effect from select menu value
+			full();
+			$( "#knapsack" ).effect( "highlight", {color: 'red'}, 1000);
+			$( "#Down" ).effect( "shake", 1000);
+		}
+		
+		
+	}
+	// if: out of knapsack
+	if (outerBox.id == 'Down') {
+		ev.target.style.margin = "2px";
+		ev.target.style.padding = "4px";
+		ev.target.style.border = "1px outset rgb(237,237,237)";
+		// Remove box from knapsack and back to basket
+		up.appendChild(ev.target);
+		// Save event
+		save(ev.target, "remove");
+	}
+	
+	return true;
+});
+
+})
+function startCountDown(i, p, f)
+{
+	// store parameters
+	var pause = p;
+	var fn = f;
+	// make reference to div
+	var countDownObj = document.getElementById("time");
+	countDownObj.count = function(i)
+	{
+		// write out count
+		countDownObj.innerHTML = i;
+		if (i == 0)
+		{
+			// execute function
+			$( "fieldset#timeFieldset" ).effect( "highlight", {color: 'red'});
+			$( "legend#timeLegend" ).effect( "highlight", {color: 'red'});
+			fn();
+			// stop
+		return;
+		}
+		if ((i == 3) || (i == 2) || (i == 1))
+		{
+			$( "fieldset#timeFieldset" ).effect( "highlight", {color: 'yellow'});
+			$( "legend#timeLegend" ).effect( "highlight", {color: 'yellow'});
+		}
+		setTimeout(function(){	countDownObj.count(i - 1);},pause);
+		// set it going
+	}
+	countDownObj.count(i);
+}
+
+function roundFinished() {
+	var nextRound = parseInt({{round.nr}}) +1;
+	nextPageClicked = true;
+	window.location.replace("/knapsack/"+nextRound);
+};
+
+function show() {
+            $( "#start" ).hide( "drop");
+	    document.getElementById("Game").style.visibility='visible';
+	    startCountDown(100, 1000, roundFinished);
+};
+
+</script>
+<body>
+    <div style="float: left; display: inline">
+	<fieldset id="start" style="margin-top: 150px; margin-left: 300px; height: 120px; width: 355px">
+		<legend>Round {{round.nr}}</legend>
+		<div style="float: left; display: inline">
+		    <div style="height: 80px; width: 170px; text-align: justify;">
+			<div style="margin-top: 2px" id="startText">Start round.</div>
+		    </div>
+		</div>
+		<div style="float: left; display: inline">
+		    <div id="button" onclick="show()" style="height: 80px; width: 170px; text-align: center; border:1px outset rgb(237,237,237);" >
+			{% load static %}
+			<img src="{% get_static_prefix %}Yes.png" style="width:60px; height: 72px" alt="Check"/>
+		    </div>
+		</div>
+	</fieldset>
+    </div>
+<div id="Game" style="visibility: hidden">
+<fieldset style="float: left; margin-right: 4px">
+<legend>Value</legend>
+<div id="colorScale" style="height: 200px; width:50px;height: auto;">
+<div style="text-align: center">High</div>
+{% for box in colorScale %}
+	<div class= "box" style="background-color:rgb({{ box.colour }}, {{ box.colour }}, {{ box.colour }}); width:35px; height: 9px; float: left;"></div>
+{% endfor %}
+<div style="text-align: center">Low</div>
+</div>
+</fieldset>
+
+
+	
+
+
+<div style="width:720px; float: left">
+<fieldset style="width: 700px; float: left">
+<legend>Boxes</legend>
+<div id="Up">
+  {% if box_utility %}
+	{% for box in box_utility %}
+		{% csrf_token %}
+		<div class= "box" name={{box.id}} data-weight={{box.cost}} data-benefit={{box.benefit}} data-user={{user.user_code}} data-id={{box.id}}
+				     style="background-color:rgb({{ box.colour }}, {{ box.colour }}, {{ box.colour }}); width:{{box.cost}}px"></div>
+
+	{% endfor %}
+</div>
+</fieldset>
+
+<div id="Middle"></div>
+
+<fieldset style="width: 700px;" id="knapsack">
+<legend>Knapsack</legend>
+<div id="Down"></div>
+</fieldset>
+
+</div>
+
+<div style="width: 140px; float: left;">
+<div style="margin-left: 8px">
+<fieldset style="float: left" id="payoutFieldset">
+<legend id="payoutLegend">Result</legend>
+<div id="payout" style="height: 35px; width: 85px; text-align: right; padding-bottom: 8px; font-size: xx-large" >0 %</div>
+</fieldset>
+
+<fieldset style="float: left; margin-top: 10px" id="moneyFieldset">
+<legend>Payout</legend>
+<div id="money" style="height: 30px; width: 85px; text-align: center; padding-bottom: 8px; font-size: xx-large">$ 0.00</div>
+</fieldset>
+    
+
+<fieldset style="float: left; margin-top: 10px" id="timeFieldset">
+<legend id="timeLegend">Time</legend>
+<div id="time" style="height: 35px; width: 85px; text-align: center; padding-bottom: 8px; font-size: xx-large" >100</div>
+</fieldset>
+
+<fieldset style="float: left; margin-top: 10px">
+<legend>Round</legend>
+<div id="Round" style="height: 35px; width: 85px; text-align: center; padding-bottom: 8px; font-size: xx-large" >{{round.nr}}</div>
+</fieldset>
+
+<fieldset style="float: left; margin-top: 10px">
+<legend>Next</legend>
+<div id="Continue" onclick="roundFinished()" style="height: 40px; width: 85px; text-align: center; border:1px outset rgb(237,237,237);">
+	{% load static %}
+	<img src="{% get_static_prefix %}Yes.png" style="width:40px; height: 36px" alt="Check"/>
+</div>
+</fieldset>
+</div>
+
+</div>
+</div>
+
+{% else %}
+	<p>No boxes are available.</p>
+{% endif %}
+
+</body>
+

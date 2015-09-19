@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}Energy Information Lab - Data{% endblock %}</title>
+<style>
+    
+body
+{
+    position: absolute;
+    margin: 0px 0 0 0px;
+    top: 10%;
+    left: 10%;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+label
+{
+width: 4em;
+float: left;
+text-align: right;
+margin-right: 0.5em;
+display: block
+}
+.submit input
+{
+margin-left: 2.5em;
+width: 100px;
+}
+input
+{
+color: black;
+background: ffffff;
+border: 1px solid #781351
+}
+
+.submit input
+{
+color: #000;
+background: #ffffff;
+border: 2px outset #d7b9c9
+}
+fieldset
+{
+border: 1px solid grey;
+width: 600px
+}
+
+legend
+{
+color: black;
+background: #ffffff;
+border: 1px solid #781351;
+padding: 2px 6px
+} 
+
+</style>
+</head>
+
+<body>
+
+<div class='login'>
+
+
+<fieldset style="border: 1px solid white;">
+<fieldset>
+<legend>General Information</legend>
+<form action="/data/export_box/" method="post">
+{% csrf_token %}
+<p class="submit" style="float: left"><input type="submit" value="Box" /></p>
+</form>
+<form action="/data/export_round/" method="post">
+{% csrf_token %}
+<p class="submit" style="float: left"><input type="submit" value="Round" /></p>
+</form>
+</fieldset>
+<p></p>
+<fieldset>
+<legend>Data</legend>
+<form action="/data/export_user/" method="post">
+{% csrf_token %}
+<p class="submit" style="float: left"><input type="submit" value="User" /></p>
+</form>
+<form action="/data/export_stat/" method="post">
+{% csrf_token %}
+<p class="submit" style="float: left"><input type="submit" value="Action" /></p>
+</form>
+<form action="/data/export_answer/" method="post">
+{% csrf_token %}
+<p class="submit" style="float: left"><input type="submit" value="Answer" /></p>
+</form>
+<form action="/data/export_feedback/" method="post">
+{% csrf_token %}
+<p class="submit" style="float: left"><input type="submit" value="Feedback" /></p>
+</form>
+</fieldset>
+<p></p>
+<fieldset>
+<legend>Payout</legend>
+<form action="/data/export_payout/" method="post">
+{% csrf_token %}
+<p class="submit" style="float: left"><input type="submit" value="Payout" /></p>
+</form>
+</fieldset>
+</fieldset>
+
+</div>
+</html>

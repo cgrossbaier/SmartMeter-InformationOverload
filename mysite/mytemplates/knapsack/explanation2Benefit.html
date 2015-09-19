@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}Energy Information Lab{% endblock %}</title>
+<style type="text/css">
+    
+body
+{
+    position: absolute;
+    margin: 0px 0 0 0px;
+    top: 5%;
+    left: 15%;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif
+}
+
+label
+{
+width: 4em;
+float: left;
+text-align: right;
+margin-right: 0.5em;
+display: block
+}
+
+.submit input
+{
+margin-left: 0.5em;
+}
+input
+{
+color: black;
+background: ffffff;
+border: 1px solid #781351
+}
+.box {
+		padding: 4px;
+		margin:2px;
+		border:1px outset rgb(237,237,237);
+		background: #ffffff;
+		float:left;
+		height:20px;
+		color: #000;
+}
+.submit input
+{
+color: #000;
+background: #ffffff;
+border: 2px outset #d7b9c9
+}
+fieldset
+{
+border: 1px solid grey;
+}
+
+legend
+{
+color: black;
+background: #ffffff;
+border: 1px solid #781351;
+padding: 2px 6px
+}
+
+img {
+display:block; /*images must be set to block in order use auto margins*/
+   margin:0 auto; /*centers images in most browsers*/
+   text-align:center; /*centers images in older browsers*/
+}*/
+
+
+</style>
+</head>
+
+<body>
+    
+
+
+<div class='login'>
+
+<form action="/welcome/3/" method="post">
+    {% csrf_token %}
+<fieldset style="width: 900px;">
+<legend>Knapsack Game</legend>
+
+<table style="text-align:justify;">
+<tr>
+    <td width="90"><div style="text-align: center; border: 1px outset #d7b9c9; height: 40px; padding-top: 20px"; >Boxes</div></td>
+    <td width="30"></td>
+    <td width="400">The items you can choose from are modelled as boxes.</td>
+    <td width="30"></td>
+    <td><div style="border: 1px outset #d7b9c9; height: 70px; padding-left: 8px"; >
+{% for box in exampleBoxes %}
+	<div class= "box" style="background-color:rgb({{ box.colour }}, {{ box.colour }}, {{ box.colour }}); float: left; width: {{ box.cost }}px; margin-top: 20px;"></div>
+{% endfor %}
+</div></td>
+</tr>
+
+<tr>
+    <td><div style="text-align: center; border: 1px outset #d7b9c9; height: 50px; padding-top: 33px"; >Color</div></td>
+    <td></td>
+    <td style="border-top: 1px solid grey;">The color of the box represents its value. Different colors have different values. Boxes with the same color have the same value as each other. But as you will see below, the cost in space may be different.</td>
+    <td></td>
+    <td>
+    <div style="border: 1px outset #d7b9c9; height: 90px; padding: 15px"; >
+	<div style="float: left;">
+	    <div style="float: left; width: 370px">
+		<div style="text-align: center;float: left; margin-right: 8px; margin-top: 5px">High</div>
+		<div style="float: left; border: 1px solid grey;">
+		{% for box in colorScale %}
+		    <div class= "box" style="background-color:rgb({{ box.colour }}, {{ box.colour }}, {{ box.colour }}); float: left; width: {{widthBox}}px; margin: 0px ; border: 0px outset "></div>
+		{% endfor %}
+		</div>
+		<div style="text-align: center; float: left; margin-left: 8px; margin-top: 5px">Low</div>
+	    </div>
+	 <table>
+	    <tr>
+		<td width="115">Same value</td>
+		<td><div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 60px; background-color: grey; float: left; margin-left: 4px"; ></div></td>
+		<td><div style="text-align: center; height: 30px; width: 35px; float: left; margin: 1px; padding-top: 7px"; > = </div></td>
+		<td><div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 40px; background-color: grey; float: left;"></div></td>
+	    </tr>
+	</table>
+	</div>
+    </div>
+</td>
+</tr>
+<tr>
+    <td><div style="text-align: center; border: 1px outset #d7b9c9; height: 60px; padding-top: 45px"; >Size</div></td>
+    <td></td>
+    <td style="border-top: 1px solid grey;"><p></p>The width of the box represents its size. Thus, the wider the box the greater the space it will take up in your knapsack without necessarily adding value.</td>
+    <td></td>
+    <td>
+    <div style="border: 1px outset #d7b9c9; height: 100px;"; >
+	<table style="margin-top: 4px; margin-left: 18px">
+	    <tr>
+		<td width="110">Same size</td>
+		<td><div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 50px; background-color: grey; float: left; margin-left: 4px"; ></div></td>
+		<td><div style="text-align: center; height: 30px; width: 35px; float: left; margin: 1px; padding-top: 7px"; > = </div></td>
+		<td><div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 50px; background-color: black; float: left;"></div></td>
+	    </tr>
+	    <tr>
+		<td>Different size</td>
+		<td><div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 60px; background-color: grey; float: left; margin-left: 4px"; ></div></td>
+		<td><div style="text-align: center; height: 30px; width: 35px; float: left; margin: 1px; padding-top: 7px"; > > </div></td>
+		<td><div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 40px; background-color: grey; float: left;"></div></td>
+	    </tr>
+	</table>
+    </div>
+</td>
+</tr>
+
+<tr>
+    <td><div style="text-align: center; border: 1px outset #d7b9c9; height: 50px; padding-top: 35px"; >Distribution</div></td>
+    <td></td>
+    <td style="border-top: 1px solid grey;"><p></p>The different colors and box sizes are equally distributed in the game.</td>
+    <td></td>
+    <td width="170">
+    	<div style="border: 1px outset #d7b9c9; height: 150px; " >
+    		{% load static %}
+    		<img src="{% get_static_prefix %}UniformDistribution.png" style="max-width:170px; max-height: 150px"/>
+    	</div>
+    </td>
+</tr>
+
+
+</table>
+
+<p class="submit" style="float: right"><input type="submit" value="Continue" /></p>
+
+
+</fieldset>
+</form> 
+</div>
+</html>

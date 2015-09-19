@@ -1,0 +1,33 @@
+
+<div class='header'>
+<p>Welcome!
+</p>
+<p>
+Administrator login. 
+</div>
+
+<div class='login'>
+
+<div class='login_header'>
+My Questionnaire
+</div>
+
+<div class='login_body'>
+
+{% if error %}
+<strong style='color: red;'>{{ error }}</strong><p />
+{% endif %}
+
+
+  <form action="/admin/" method="post">
+        {% csrf_token %}
+    <label for="username">User name:</label>
+    <input type="text" name="username" value="" id="username">
+    <label for="password">Password:</label>
+    <input type="password" name="password" value="" id="password">
+
+    <input type="submit" value="login" />
+    <input type="hidden" name="next" value="{{ next|escape }}" />
+  </form>
+
+

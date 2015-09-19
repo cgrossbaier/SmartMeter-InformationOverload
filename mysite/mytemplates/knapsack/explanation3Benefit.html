@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}Energy Information Lab{% endblock %}</title>
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<style type="text/css">
+    
+body
+{
+    position: absolute;
+    margin: 0px 0 0 0px;
+    top: 5%;
+    left: 15%;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif
+}
+
+label
+{
+width: 4em;
+float: left;
+text-align: right;
+margin-right: 0.5em;
+display: block
+}
+
+.submit input
+{
+margin-left: 0.5em;
+}
+input
+{
+color: black;
+background: ffffff;
+border: 1px solid #781351
+}
+.box {
+    padding: 4px;
+    margin:0px;
+    background: #ffffff;
+    float:left;
+    height:20px;
+    color: #000;
+    border: 1px outset grey;
+}
+
+.submit input
+{
+color: #000;
+background: #ffffff;
+border: 2px outset #d7b9c9
+}
+fieldset
+{
+border: 1px solid grey;
+}
+
+legend
+{
+color: black;
+background: #ffffff;
+border: 1px solid #781351;
+padding: 2px 6px
+}
+
+img {
+display:block; /*images must be set to block in order use auto margins*/
+   margin:0 auto; /*centers images in most browsers*/
+   text-align:center; /*centers images in older browsers*/
+}*/
+
+
+</style>
+<script>
+    $(function() {
+        $( "slider" ).slider();
+    });
+</script>
+
+</head>
+
+<body>
+    
+
+
+<div class='login'>
+
+<form action="/welcome/4/" method="post">
+{% csrf_token %}
+<fieldset style="width: 800px;">
+<legend>Knapsack Game</legend>
+
+<table style="text-align:justify;">
+<tr>
+    <td width="90"><div style="text-align: center; border: 1px outset #d7b9c9; height: 70px; padding-top: 35px"; >Goal of the Game</div></td>
+    <td width="30"></td>
+    <td width="400">Your goal is to maximize the value in your knapsack. This is done by choosing the most valuable combination of boxes to fill the knapsack. 
+        The optimal combined value of the knapsack is 100% for every round. With an empty knapsack you start out at 0% of the knapsack value. By clicking the available boxes in the upper area the value of the knapsack increases and you get closer and closer to the optimal combined value of 100%.<p></p></td>
+<td width="30"></td>
+<td width="170"><div style="text-align: center; border: 1px outset #d7b9c9; height: 70px; padding-top: 35px"; >Max. result: 100%</div></td>
+</tr>
+
+<tr>
+    <td width="90"><div style="text-align: center; border: 1px outset #d7b9c9; height: 70px; padding-top: 35px"; >Payout Scheme</div></td>
+    <td width="30"></td>
+    <td style="border-top: 1px solid grey;">For each completed round, you get a guaranteed $0.05 payout. If you achieve a result greater then or equal to 80%, you get an extra bonus of up to $0.10 the closer you approach 100%.
+If you do not select any boxes during one round, you will not receive any payout.</td>
+    <td width="30"></td>
+<td width="170">
+    <div style="border: 1px outset #d7b9c9; height: 150px; " >
+    {% load static %}
+	<img src="{% get_static_prefix %}PayoutScheme.png" style="max-width:170px; max-height: 150px"/>
+    </div>
+</td>
+</tr>
+<tr>
+    <td width="90"><div style="text-align: center; border: 1px outset #d7b9c9; height: 70px; padding-top: 15px"; >The Dilemma</div></td>
+    <td width="30"></td>
+    <td style="border-top: 1px solid grey;"><p></p>By adding and removing boxes in the knapsack you can evaluate different combinations. Boxes with high value and large size can be traded for boxes with lower value and smaller size or vice versa.</td>
+    <td width="30"></td>
+<td width="180">
+    <div style="text-align: center; border: 1px outset #d7b9c9; height: 70px; padding: 10px"; >
+    <div style="text-align: center; height: 30px; width: 175px; background-color: white; margin: 4px"; >The Dilemma</div>
+    <div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 60px; background-color:rgb({{ bestBenefitBox.colour }}, {{ bestBenefitBox.colour }}, {{ bestBenefitBox.colour }}); float: left; margin-left: 4px"; ></div>
+    <div style="text-align: center; height: 30px; width: 40px; float: left; margin: 1px; padding-top: 7px"; > vs.</div>
+    <div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 35px; background-color: grey; float: left;"></div>
+    <div style="text-align: center; border: 1px outset #d7b9c9; height: 30px; width: 30px; background-color: grey; float: left; margin-left: 3px"></div>
+    </div>
+</td>
+</tr>
+
+
+</table>
+
+<p class="submit" style="float: right"><input type="submit" value="Continue" /></p>
+
+
+</fieldset>
+</form> 
+</div>
+</html>

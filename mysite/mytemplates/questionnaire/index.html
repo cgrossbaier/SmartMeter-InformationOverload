@@ -1,0 +1,10 @@
+{% load url from future %}
+{% if question_list %}
+    <ul>
+    {% for question in question_list %}
+        <li><a href="/questionnaire/{{ question.id }}/">{{ question.id }}. {{ question.text }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No questions are available.</p>
+{% endif %}

@@ -1,0 +1,188 @@
+<head>
+<title>{% block title %}Energy Information Lab{% endblock %}</title>
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+
+</head>
+
+<script language = "javascript">
+window.onload = function() {
+
+var payoutRound1 = document.getElementById('payoutRound1');
+var payoutRound2 = document.getElementById('payoutRound2');
+var payoutRound3 = document.getElementById('payoutRound3');
+
+var payoutRound1Total = document.getElementById('payoutRound1Total');
+var payoutRound2Total = document.getElementById('payoutRound2Total');
+var payoutRound3Total = document.getElementById('payoutRound3Total');
+
+var payoutTotal = document.getElementById('payoutTotal');
+var payoutTotalValue=0;
+
+var payoutRound1Cumulated = 0;
+var payoutRound2Cumulated = 0;
+var payoutRound3Cumulated = 0;
+
+var payoutRound1Value = parseInt({{payoutRound1}});
+var payoutRound2Value = parseInt({{payoutRound2}});
+var payoutRound3Value = parseInt({{payoutRound3}});
+
+var error = false;
+
+if (payoutRound1Value > 0){
+    payoutRound1.innerHTML = payoutRound1Value.toFixed(0) + " %";
+    payoutRound1Cumulated += 0.01;
+    if ({{payoutRound1}}>=80){
+        bonus = Math.min((payoutRound1Value-80)/20*0.20, 0.20);
+        document.getElementById('bonus1').innerHTML="$ " + bonus.toFixed(2);
+        payoutRound1Cumulated += bonus;
+    }}
+else{
+        payoutRound1.innerHTML = "0%";
+        payoutRound1.style.color = "red";
+        payoutRound1Total.style.color = "red";
+        error=true;
+    }
+
+if (payoutRound2Value > 0){
+    payoutRound2.innerHTML = payoutRound2Value.toFixed(0) + " %";
+    payoutRound2Cumulated += 0.01;
+    if ({{payoutRound2}}>=80){
+        bonus = Math.min((payoutRound2Value-80)/20*0.20, 0.20);
+        document.getElementById('bonus2').innerHTML="$ " + bonus.toFixed(2);
+        payoutRound2Cumulated += bonus;
+    }}
+else{
+        payoutRound2.innerHTML = "0%";
+        payoutRound2.style.color = "red";
+        payoutRound2Total.style.color = "red";
+        error=true;
+    }
+if (payoutRound3Value > 0){
+    payoutRound3.innerHTML = payoutRound3Value.toFixed(0) + " %";
+    payoutRound3Cumulated += 0.01;
+    if ({{payoutRound3}}>=80){
+        bonus = Math.min((payoutRound3Value-80)/20*0.20, 0.20);
+        document.getElementById('bonus3').innerHTML="$ " + bonus.toFixed(2);
+        payoutRound3Cumulated += bonus;
+    }}
+else{
+        payoutRound3.innerHTML = "0%";
+        payoutRound3.style.color = "red";
+        payoutRound3Total.style.color = "red";
+        error=true;
+    }
+
+if (error == false){
+    
+    payoutTotalValue = payoutRound1Cumulated + payoutRound2Cumulated + payoutRound3Cumulated;
+    payoutRound1Total.innerHTML = "$ " + payoutRound1Cumulated.toFixed(2);
+    payoutRound2Total.innerHTML = "$ " + payoutRound2Cumulated.toFixed(2);
+    payoutRound3Total.innerHTML = "$ " + payoutRound3Cumulated.toFixed(2);
+    payoutTotal.innerHTML = "$ " + payoutTotalValue.toFixed(2);
+    var data= {payout: payoutTotalValue, usercode: {{usercode}}};
+    var link = "/questionnaire/logout/save/";
+	
+    $.getJSON(link, data, function(json){
+        $("div#code").text(json);
+    }); 
+}
+
+else{
+    payoutTotal.style.color = "red";
+    document.getElementById('bonus1').innerHTML="-"
+    document.getElementById('bonus2').innerHTML="-"
+    document.getElementById('bonus3').innerHTML="-"
+    $("div#code").text("You did not select any boxes in at least one round. Therefore, no payment will be made.");
+}
+
+}
+
+</script>
+    
+    
+<style>
+
+body
+{
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    margin: 0px 0 0 0px;
+    top: 5%;
+    left: 15%;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+label
+{
+width: 4em;
+float: left;
+text-align: right;
+margin-right: 0.5em;
+display: block
+}
+
+.submit input
+{
+margin-left: 4.5em;
+}
+input
+{
+color: black;
+background: ffffff;
+border: 1px solid #781351
+}
+
+.submit input
+{
+color: #000;
+background: #ffffff;
+border: 2px outset #d7b9c9
+}
+fieldset
+{
+border: 1px solid grey;
+width: 40em
+}
+
+legend
+{
+color: black;
+background: #ffffff;
+border: 1px solid #781351;
+padding: 2px 6px
+} 
+
+</style>
+
+<body>
+
+<fieldset>
+<legend>Logged Out</legend>
+<p>Your answers have been stored and you are logged out. Thank you for your time!</p>
+<h3>Please find below the code you need to provide for the MTURK in order to complete your HIT.</h3>
+</fieldset>
+
+<p></p>
+
+<fieldset>
+<legend>Payout</legend>
+
+<table style="text-align: center" id="table">
+<tr><td width="100">Round</td><td width="100">Payout</td><td width="100">Result</td><td width="150">Bonus</td><td width="100">Total Payout</td></tr>
+<tr><td width="100">1</td><td width="100">$0.01</td><td width="100" id="payoutRound1">-</td><td width="150" id="bonus1">-</td><td width="100" id="payoutRound1Total"></td></tr>
+<tr><td width="100">2</td><td width="100">$0.01</td><td width="100" id="payoutRound2">-</td><td width="150" id="bonus2">-</td><td width="100" id="payoutRound2Total"></td></tr>
+<tr ><td width="100">3</td><td width="100">$0.01</td><td width="100" id="payoutRound3" >-</td><td width="150" id="bonus3">-</td><td style="border-bottom: 1px solid black;" width="100" id="payoutRound3Total";"></td></tr>
+<tr><td width="100"></td><td width="100"></td><td width="100"></td><td width="100"></td><td width="100" id="payoutTotal" style="font-weight: bold; font-size: large;">$ 0.00</td></tr>
+</table>
+</fieldset>
+
+<p></p>
+
+<fieldset>
+<legend>MTURK code</legend>
+<div id="code" style="text-align: center; color: red"></div>
+</fieldset>
+</body>
+</html>

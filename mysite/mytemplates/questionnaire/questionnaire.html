@@ -1,0 +1,66 @@
+{% extends "questionnaire/main.html" %}
+
+{% block main %}
+
+<script type="text/javascript">
+
+var question_array = new Array({% for category in categories %}{% for question in category.questions %}"{{question.id}}" ,{% endfor %}{% endfor %}"");
+var question_text_array = new Array({% for category in categories %}{% for question in category.questions %}"{{question.text}}" ,{% endfor %}{% endfor %}"");
+
+var open_question = "";
+
+</script>
+
+<div class='window'>
+
+<div class='window_title'>
+My Questionnaire
+</div>
+
+<div class='window_body'>
+
+<form name='question' method='post' action='/questionnaire/questionnaire/'>
+
+{% for category in categories %}
+  <p>{{ category.text }}
+
+  <ul style='list-style-type: none;'>
+  {% for question in category.questions %}
+   <li>
+   <strong>{{ question.text }}</strong>
+   <br />
+
+  {% ifequal question.type 4 %}
+    {% include "questionnaire/open_textarea.html" %}
+  {% endifequal %}
+
+  {% ifequal question.type 3 %}
+    {% include "questionnaire/multiplechoice-multipleanswers.html" %}
+  {% endifequal %}
+
+  {% ifequal question.type 2 %}
+      {% include "questionnaire/multiplechoice.html" %}
+  {% endifequal %}
+
+  {% ifequal question.type 1 %}
+      {% include "questionnaire/open.html" %}
+  {% endifequal %}
+  <p />
+  </li>    
+  {% endfor %}
+  </ul>
+<p />
+{% endfor %}
+
+
+<div align='right' >
+<input class='submit' type='button' value='{% if last %}Complete questionnaire{%else %}Next page{% endif %}' onclick='v = check_complete(question_array, "question"); if (v === true) { document.question.submit(); } else { t = get_text_from_id(question_text_array, v); alert("Not all questions have been answered. Please fill in all questions before submitting your answers.\n\nCheck the question:\n" + t); }' />
+</div>
+
+</form>
+
+</div> <!-- window body -->
+
+</div> <!-- window -->
+
+{% endblock %}

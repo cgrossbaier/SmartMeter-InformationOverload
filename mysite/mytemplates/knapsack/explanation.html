@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}Energy Information Lab{% endblock %}</title>
+<style type="text/css">
+    
+body
+{
+    position: absolute;
+    margin: 0px 0 0 0px;
+    top: 5%;
+    left: 15%;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif
+}
+
+label
+{
+width: 4em;
+float: left;
+text-align: right;
+margin-right: 0.5em;
+display: block
+}
+
+.submit input
+{
+margin-left: 0.5em;
+}
+input
+{
+color: black;
+background: ffffff;
+border: 1px solid #781351
+}
+
+.submit input
+{
+color: #000;
+background: #ffffff;
+border: 2px outset #d7b9c9
+}
+fieldset
+{
+border: 1px solid grey;
+width: 600px;
+}
+
+legend
+{
+color: black;
+background: #ffffff;
+border: 1px solid #781351;
+padding: 2px 6px
+}
+
+img {
+display:block; /*images must be set to block in order use auto margins*/
+   margin:0 auto; /*centers images in most browsers*/
+   text-align:center; /*centers images in older browsers*/
+}
+
+</style>
+</head>
+
+<body>
+
+<div class='login'>
+
+<form action="/welcome/2/" method="post" >
+{% csrf_token %}
+<fieldset>
+<legend>Knapsack Problem</legend>
+<table width = "600">
+<tr>
+    <td><div style="width: 150px; height: 130px; float: left">
+        {% load static %}
+	<img src="{% get_static_prefix %}Hiker.png" style="width:130px;" alt="Hiker"/>
+    </div>
+    </td>
+    <td>
+        Imagine you go on a hiking trip and you take a knapsack with you.
+        You have more things that you would like to bring along than could possibly fit in the knapsack. 
+    </td>
+</tr>
+<tr style="height: 10px"></tr>
+<tr>
+    <td><div style="width: 150px; height: 130px; float: left;">
+        {% load static %}
+	<img src="{% get_static_prefix %}Knapsack.png" style="width:130px;" alt="Knapsack"/>
+    </div>
+    </td>
+    <td>
+        Due to the limited capacity of the knapsack, you have to choose to carry the items that have the highest value to you.
+    </td>
+</tr>
+<tr>
+    <td></td>
+    <td>
+        The game you are about to play is based on this problem. 
+    </td>
+</tr>
+</table>
+
+<p class="submit" style="float: right"><input type="submit" value="Continue" /></p>
+
+
+</fieldset>
+</form> 
+</div>
+</html>

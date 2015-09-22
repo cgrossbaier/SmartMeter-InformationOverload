@@ -3,7 +3,7 @@
 
 An experiment I set up for my Bachelor thesis. You can find out more about this work by looking at my [thesis] (https://github.com/cgrossbaier/SmartMeter-InformationOverload/blob/master/thesis_FINAL.pdf). 
 
-![Alt text](https://github.com/cgrossbaier/SmartMeter-InformationOverload/blob/master/fig/Interface.jpg "Interface")
+![Alt text](https://github.com/cgrossbaier/SmartMeter-InformationOverload/blob/master/fig/Interface2.jpg "Interface")
 
 ***
 ### A little technical background

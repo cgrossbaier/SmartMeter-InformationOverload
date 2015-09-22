@@ -17,7 +17,7 @@ Data analysis was done using R. I mainly used Linear Mixed Models to account for
 
 I received the highest mark for the bachelor thesis (1.0 – Top mark in German grading system)
 
-![Alt text](https://github.com/cgrossbaier/SmartMeter-InformationOverload/blob/master/fig/EnfoLab_Coordination.pdf "EnfoLab_Coordination")
+![Alt text](https://github.com/cgrossbaier/SmartMeter-InformationOverload/blob/master/fig/EnfoLab_Coordination.jpg "EnfoLab_Coordination")
 
 
 
